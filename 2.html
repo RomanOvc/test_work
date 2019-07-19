@@ -1,0 +1,415 @@
+<html>
+<head>
+    <title>Test_work_map</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/demo.css"/>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet-measure/dist/leaflet-measure.css">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="node_modules/leaflet.measurecontrol/docs/leaflet-draw/dist/leaflet.draw.css"/>
+    <link rel="stylesheet" href="node_modules/leaflet.measurecontrol/docs/leaflet.measurecontrol.css"/>
+    <link rel="stylesheet" href="node_modules/leaflet-mouse-position/src/L.Control.MousePosition.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="node_modules/leaflet.measurecontrol/docs/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/leaflet.measurecontrol/leaflet.measurecontrol.js"></script>
+    <script src="node_modules/leaflet-mouse-position/src/L.Control.MousePosition.js"></script>
+    <script src="node_modules/underscore/underscore.js"></script>
+    <script src="node_modules/backbone/backbone.js"></script>
+    <script src="node_modules/leaflet-measure/dist/leaflet-measure.ru.js"></script>
+</head>
+<body>
+<div id="mapid" style="position: relative;z-index: 1500" class="park_DSTU"></div>
+<div id="map_objs" class="right_scroll"></div>
+<div class="overlay"></div>
+<script type="text/template" id="map_obj" class="overflow-auto">
+    <div class="card bg-light mb-3 " style="max-width: 18rem; margin: 20px">
+        <div class="card-header"><%= name_obj %></div>
+        <div class="card-body">
+            <p class="card-text"><%= info %></p>
+        </div>
+    </div>
+</script>
+<script>
+
+    // map options
+    var mymap = L.map('mapid').setView([47.240027, 39.710844], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png ', {
+        maxZoom: 18,
+        attribution: 'Map data <a target="_blank" href="http://www.openstreetmap.org">OpenStreetMap.org</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        id: 'mapbox.streets',
+    }).addTo(mymap);
+
+
+    //icons
+    //sport arena marker
+    var iconSportArena = {
+        iconUrl: 'images/baseline_fitness_center_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var SportArenaCustomIcon = L.icon(iconSportArena);
+    var SportArenaMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: SportArenaCustomIcon
+    };
+
+
+    //campus marker
+    var iconCampus = {
+        iconUrl: 'images/baseline_account_balance_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var CampusCustomIcon = L.icon(iconCampus);
+    var CampusMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: CampusCustomIcon
+    };
+
+
+    // bus stop marker
+    var iconBusStop = {
+        iconUrl: 'images/baseline_directions_bus_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var BusStopCustomIcon = L.icon(iconBusStop);
+    var BusStopMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: BusStopCustomIcon
+    };
+
+
+    //marker photo for monument
+    var iconPhoto = {
+        iconUrl: 'images/baseline_camera_alt_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var PhotoCustomIcon = L.icon(iconPhoto);
+    var PhotoMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: PhotoCustomIcon
+    };
+
+
+    //swiming pool marker
+    var iconSwimmingPool = {
+        iconUrl: 'images/baseline_pool_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var SwimmingPoolCustomIcon = L.icon(iconSwimmingPool);
+    var SwimmingPoolMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: SwimmingPoolCustomIcon
+    };
+
+
+    //Hostel maker
+    var iconHostel = {
+        iconUrl: 'images/baseline_local_hotel_black_18dp.png',
+        iconSize: [20, 20]
+    };
+    var HostelCustomIcon = L.icon(iconHostel);
+    var HostelMarkerOptions = {
+        title: "my",
+        clickable: true,
+        draggable: true,
+        icon: HostelCustomIcon
+    };
+
+
+    //1. Легко-атлетический манеж ДГТУ.
+    L.polygon([
+        [47.24089702, 39.71034586],
+        [47.24086789, 39.70864534],
+        [47.24111918, 39.70863998],
+        [47.24115196, 39.71031904],
+    ]).addTo(mymap).bindPopup("Легко-атлетический манеж ДГТУ");
+    var markerSportArena = L.marker([47.24099026, 39.7099607], SportArenaMarkerOptions).addTo(mymap).bindPopup('Легко-атлетический манеж ДГТУ');
+
+
+    //2. Стадион ДГТУ
+    L.polygon([
+        [47.23983355, 39.709656],
+        [47.23979931, 39.70863354],
+        [47.23890846, 39.70870113],
+        [47.23895216, 39.70972037],
+    ]).addTo(mymap).bindPopup("Стадион ДГТУ");
+    var markerBigStadium = L.marker([47.23935571, 39.70910668], SportArenaMarkerOptions).addTo(mymap).bindPopup('Стадион ДГТУ');
+
+
+    //3. Памятник студентам и сотрудникам ДГТУ
+    var markerMonument = L.marker([47.2392683, 39.71040702], PhotoMarkerOptions).addTo(mymap).bindPopup(" Памятник студентам и сотрудникам ДГТУ");
+
+
+    //4. Мини-футбольное поле Дгту
+    L.polygon([
+        [47.23889826, 39.70985019],
+        [47.2389121, 39.71056473],
+        [47.23870814, 39.71056473],
+        [47.23868483, 39.70986199],
+    ]).addTo(mymap).bindPopup("Мини-футбольное поле Дгту");
+    var markerMiniStadium = L.marker([47.23876131, 39.71022248], SportArenaMarkerOptions).addTo(mymap).bindPopup('Мини-футбольное поле Дгту');
+
+
+    //5. Бассейн "Универ"
+    L.polygon([
+        [47.23895945, 39.71073425],
+        [47.23896163, 39.71079648],
+        [47.23897401, 39.71080506],
+        [47.23897329, 39.71084154],
+        [47.2389558, 39.71084368],
+        [47.23895508, 39.7108705],
+        [47.23894633, 39.71087158],
+        [47.2389507, 39.71096599],
+        [47.23896017, 39.71097243],
+        [47.23895872, 39.71101642],
+        [47.23896454, 39.71106362],
+        [47.238966, 39.71115053],
+        [47.23856391, 39.71117198],
+        [47.23856245, 39.71115911],
+        [47.23855007, 39.71116126],
+        [47.2385508, 39.7111398],
+        [47.23854497, 39.71114409],
+        [47.2385406, 39.71108508],
+        [47.23855735, 39.71107757],
+        [47.23855225, 39.71087801],
+        [47.23859159, 39.71087265],
+        [47.23860543, 39.71080291],
+        [47.23862291, 39.71079326],
+        [47.23862947, 39.71072674],
+        [47.23871834, 39.71072245],
+        [47.23872125, 39.71074712],
+        [47.23872125, 39.71074712],
+    ]).addTo(mymap).bindPopup('Бассейн "Универ');
+    var markerSwimmingPool = L.marker([47.23873218, 39.7109735], SwimmingPoolMarkerOptions).addTo(mymap).bindPopup('Бассейн "Универ');
+
+
+    //6. ДГТУ 8 корпус
+    L.polygon([
+        [47.23852312, 39.71156466],
+        [47.23852894, 39.7117964],
+        [47.23811811, 39.71184039],
+        [47.23811446, 39.71190691],
+        [47.2379462, 39.71192408],
+        [47.23792361, 39.71126211],
+        [47.23789011, 39.71125782],
+        [47.23770945, 39.71134472],
+        [47.23766065, 39.71109366],
+        [47.23784276, 39.71102822],
+        [47.23783839, 39.71099281],
+        [47.23792507, 39.71096921],
+        [47.23793017, 39.71100247],
+        [47.23800447, 39.71098745],
+        [47.23806275, 39.71107113],
+        [47.23806275, 39.71112585],
+        [47.2380948, 39.71111941],
+        [47.23810937, 39.71159256],
+    ]).addTo(mymap).bindPopup("ДГТУ 8 корпус");
+    var markerEightCampus = L.marker([47.2379848, 39.71135974], CampusMarkerOptions).addTo(mymap).bindPopup('ДГТУ 8 корпус');
+
+
+    //7. Главный корпус ДГТУ
+    L.polygon([
+        [47.23751381, 39.71097979],
+        [47.2375877, 39.71135652],
+        [47.2372779, 39.7114868],
+        [47.23726968, 39.71146151],
+        [47.23722545, 39.71148128],
+        [47.23728165, 39.71174797],
+        [47.23729164, 39.71174353],
+        [47.23735387, 39.71205742],
+        [47.23731588, 39.71207673],
+        [47.23733274, 39.71214233],
+        [47.23740756, 39.71210126],
+        [47.23744877, 39.71227905],
+        [47.23736729, 39.71232365],
+        [47.2373804, 39.71241852],
+        [47.23741495, 39.71240182],
+        [47.23752765, 39.71296508],
+        [47.23756564, 39.71294653],
+        [47.23756241, 39.71291818],
+        [47.23786846, 39.71278836],
+        [47.23794463, 39.71315697],
+        [47.23776804, 39.71322794],
+        [47.23773276, 39.7130647],
+        [47.23725178, 39.71329124],
+        [47.23726541, 39.7134045],
+        [47.23711858, 39.71346734],
+        [47.23704615, 39.71310992],
+        [47.23719142, 39.71304478],
+        [47.23720391, 39.71307605],
+        [47.23737634, 39.71299788],
+        [47.23727644, 39.71250543],
+        [47.2372394, 39.71251508],
+        [47.23715302, 39.71208639],
+        [47.23719382, 39.71206922],
+        [47.23709235, 39.71157248],
+        [47.23677891, 39.71171762],
+        [47.23670742, 39.71137338],
+        [47.2368427, 39.71131207],
+        [47.2368709, 39.71143898],
+        [47.23736792, 39.71122931],
+        [47.23733545, 39.71106424],
+    ]).addTo(mymap).bindPopup(" Главный корпус ДГТУ");
+    var markerFirstCampus = L.marker([47.23726219, 39.71225667], CampusMarkerOptions).addTo(mymap).bindPopup('Главный корпус ДГТУ');
+
+
+    //8. Общежитие №3
+    L.polygon([
+        [47.23748967, 39.70968206],
+        [47.23739768, 39.71068367],
+        [47.237278, 39.71065194],
+        [47.23738623, 39.70965416],
+    ]).addTo(mymap).bindPopup("Общежитие №3");
+    var markerHostel = L.marker([47.23736198, 39.71019244], HostelMarkerOptions).addTo(mymap).bindPopup('Общежитие №3');
+
+
+    //9. Остановка Общежитие РИСИ
+    var markerBusStop = L.marker([47.23871105, 39.71323866], BusStopMarkerOptions).addTo(mymap).bindPopup("Остановка Общежитие РИСИ");
+
+
+    //MousePosition
+    L.control.mousePosition().addTo(mymap);
+    //measureControl
+    L.Control.measureControl().addTo(mymap);
+
+    options = {
+        position: 'topleft',
+        activeColor: '#C10020',
+        primaryAreaUnit: 'sqmeters',
+        secondaryLengthUnit: 'kilometers',
+        localization: 'de'
+
+    };
+    var measureControl = L.control.measure(options);
+    measureControl.addTo(mymap);
+
+    //Модель
+    var ObjsModel = Backbone.Model.extend({
+        idAttribute: '_id',
+        defults: {
+            _id: "",
+            name_obj: "",
+            info: "",
+            position_on_map: "",
+        },
+    });
+
+    //Object Sport Arena
+    var objSportArena = new ObjsModel({
+        _id: "1",
+        name_obj: "Легко-атлетический манеж ДГТУ ",
+        info: "время работы с 8:00 до 16:00",
+        position_on_map: markerSportArena
+    });
+    var objBusStop = new ObjsModel({
+        _id: "2",
+        name_obj: 'Остановка "Общежитие РИСИ"',
+        info: "№1, №5",
+        position_on_map: markerBusStop
+    });
+    var objBigStadium = new ObjsModel({
+        _id: "3",
+        name_obj: "Стадион Дгту",
+        info: "Футбольный поле с естественным покрытием",
+        position_on_map: markerBigStadium
+    });
+    var objMonument = new ObjsModel({
+        _id: "4",
+        name_obj: "Памятник студентам и сотрудникам ДГТУ",
+        info: "место",
+        position_on_map: markerMonument
+    });
+    var objMiniStadium = new ObjsModel({
+        _id: "5",
+        name_obj: "Мини-футбольное поле Дгту",
+        info: "Футбольный поле с искуственным покрытием",
+        position_on_map: markerMiniStadium
+    });
+    var objSwimmingPool = new ObjsModel({
+        _id: "6",
+        name_obj: "Бассейн 'Универ'",
+        info: "Уремя работы с 8:00 до 19:00",
+        position_on_map: markerSwimmingPool
+    });
+
+    var objEightCampus = new ObjsModel({
+        _id: "7",
+        name_obj: "ДГТУ 8 корпус",
+        info: "Учебный корпус",
+        position_on_map: markerEightCampus
+    });
+    var objFirstCampus = new ObjsModel({
+        _id: "8",
+        name_obj: "Главный корпус ДГТУ ",
+        info: "учебный корпус",
+        position_on_map: markerFirstCampus
+    });
+    var objHostel = new ObjsModel({
+        _id: "9",
+        name_obj: "Общежитие №3",
+        info: "Общежитие",
+        position_on_map: markerHostel
+    });
+
+    //Представление
+    var ObjsView = Backbone.View.extend({
+        events: {
+            "click .card.bg-light.mb-3 ": "lolbeck",
+        },
+        lolbeck: function () {
+            window.mymap.setView(this.model.attributes.position_on_map.openPopup().getLatLng(), 18);
+
+        },
+        initialize: function () {
+            this.$el.attr("data-id", this.model.attributes._id);
+            this.render();
+        },
+        template: _.template($('#map_obj').html()),
+        render: function () {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+    });
+
+    //коллекция
+    var ObjsCollection = Backbone.Collection.extend({
+        model: ObjsModel,
+    });
+
+    var objs = new ObjsCollection([objSportArena, objBusStop, objBigStadium, objMonument, objMiniStadium, objSwimmingPool, objEightCampus, objFirstCampus, objHostel]);
+
+    var ObjsCollectionView = Backbone.View.extend({
+        el: "#map_objs",
+
+        initialize: function () {
+            this.render();
+        },
+        render: function () {
+            this.collection.forEach(function (framework) {
+                this.$el.append(new ObjsView({model: framework}).el)
+            }, this); // Здесь последний параметр - контекст, иначе this для безымянной функции - глобальный объект.
+            return this
+        }
+    });
+
+    // Вызвать список на страницу:
+    $('body').append(new ObjsCollectionView({collection: objs}).el);
+
+</script>
+
+</body>
+</html>
