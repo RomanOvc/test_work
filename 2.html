@@ -314,49 +314,56 @@
         info: "время работы с 8:00 до 16:00",
         position_on_map: markerSportArena
     });
+    // Object Bus Stop
     var objBusStop = new ObjsModel({
         _id: "2",
         name_obj: 'Остановка "Общежитие РИСИ"',
         info: "№1, №5",
         position_on_map: markerBusStop
     });
+    // Object Big Stadium
     var objBigStadium = new ObjsModel({
         _id: "3",
         name_obj: "Стадион Дгту",
         info: "Футбольный поле с естественным покрытием",
         position_on_map: markerBigStadium
     });
+    //Object Monument
     var objMonument = new ObjsModel({
         _id: "4",
         name_obj: "Памятник студентам и сотрудникам ДГТУ",
         info: "место",
         position_on_map: markerMonument
     });
+    //Object Mini Stadium
     var objMiniStadium = new ObjsModel({
         _id: "5",
         name_obj: "Мини-футбольное поле Дгту",
         info: "Футбольный поле с искуственным покрытием",
         position_on_map: markerMiniStadium
     });
+    //Object Swimming Pool
     var objSwimmingPool = new ObjsModel({
         _id: "6",
         name_obj: "Бассейн 'Универ'",
         info: "Уремя работы с 8:00 до 19:00",
         position_on_map: markerSwimmingPool
     });
-
+    // Object Eight Campus
     var objEightCampus = new ObjsModel({
         _id: "7",
         name_obj: "ДГТУ 8 корпус",
         info: "Учебный корпус",
         position_on_map: markerEightCampus
     });
+    // Object First Campus
     var objFirstCampus = new ObjsModel({
         _id: "8",
         name_obj: "Главный корпус ДГТУ ",
         info: "учебный корпус",
         position_on_map: markerFirstCampus
     });
+    // Object Hostel
     var objHostel = new ObjsModel({
         _id: "9",
         name_obj: "Общежитие №3",
@@ -367,9 +374,10 @@
     //Представление
     var ObjsView = Backbone.View.extend({
         events: {
-            "click .card.bg-light.mb-3 ": "lolbeck",
+            "click .card.bg-light.mb-3 ": "active_object_on_map",
         },
-        lolbeck: function () {
+        //active_object_on_map - выбраннный объект пользователем из правой колонки
+        active_object_on_map: function () {
             window.mymap.setView(this.model.attributes.position_on_map.openPopup().getLatLng(), 18);
 
         },
